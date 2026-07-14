@@ -1,0 +1,43 @@
+<article class="card">
+  <h2>Booking #<%= @booking.id %></h2>
+
+  <dl>
+    <dt>Student</dt><dd><%= @booking.student.name %> (<%= @booking.student.email %>)</dd>
+    <dt>Tutor</dt><dd><%= @booking.tutor.name %> (<%= @booking.tutor.email %>)</dd>
+    <dt>Subject</dt><dd><%= @booking.tutor.tutor_profile&.subject || "&mdash;".html_safe %></dd>
+    <dt>Date</dt><dd><%= @booking.booking_date.strftime("%a %b %d, %Y") %></dd>
+    <dt>Time</dt><dd><%= @booking.start_time.strftime("%H:%M") %>&ndash;<%= @booking.end_time.strftime("%H:%M") %></dd>
+    <dt>Total</dt><dd>$<%= number_with_precision(@booking.total_amount, precision: 2) %></dd>
+    <dt>Status</dt><dd><%= render "status_badge", booking: @booking %></dd>
+  </dl>
+
+  <div class="actions">
+    <% if @booking.pending? && @booking.tutor_id == current_user&.id %>
+      <%= button_to "Confirm", confirm_booking_path(@booking), method: :patch, class: "btn btn-primary" %>
+    <% end %>
+
+    <% if @booking.confirmed? && @booking.tutor_id == current_user&.id %>
+      <%= button_to "Mark complete", complete_booking_path(@booking), method: :patch, class: "btn btn-primary" %>
+    <% end %>
+
+    <% if !@booking.completed? && !@booking.cancelled? &&
+          (current_user&.id == @booking.student_id || current_user&.id == @booking.tutor_id) %>
+      <%= button_to "Cancel", cancel_booking_path(@booking), method: :patch, class: "btn btn-danger",
+                    data: { turbo_confirm: "Are you sure?" } %>
+    <% end %>
+
+    <% if @booking.completed? && current_user&.id == @booking.student_id && @booking.review.nil? %>
+      <%= link_to "Leave a review",
+                  new_review_path(booking_id: @booking.id),
+                  class: "btn btn-primary" %>
+    <% end %>
+
+    <% if @booking.review.present? && current_user&.id == @booking.student_id %>
+      <p>
+        <strong>Your review:</strong>
+        <%= @booking.review.rating %>/5 &mdash;
+        <%= @booking.review.comment %>
+      </p>
+    <% end %>
+  </div>
+</article>

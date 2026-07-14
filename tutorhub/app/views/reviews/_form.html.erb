@@ -1,0 +1,32 @@
+<%# simple_form partial — used from new.html.erb. %>
+<%# `booking` and `review` are local variables set by the caller.           %>
+<%= simple_form_for review,
+                    url: reviews_path(booking_id: booking.id),
+                    method: :post,
+                    html: { class: "form-card" } do |f| %>
+
+  <% if review.errors.any? %>
+    <div class="errors">
+      <p><strong><%= pluralize(review.errors.count, "error") %> prevented this review from being saved:</strong></p>
+      <ul>
+        <% review.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.input :rating,
+              as: :radio_buttons,
+              collection: (1..5).to_a.reverse,
+              label: "Rating (1 = poor, 5 = excellent)",
+              item_wrapper_class: "inline" %>
+
+  <%= f.input :comment,
+              as: :text,
+              input_html: { rows: 4 },
+              label: "Comments (optional)",
+              placeholder: "Tell other students what to expect..." %>
+
+  <%= f.button :submit, "Submit review", class: "btn btn-primary" %>
+<% end %>

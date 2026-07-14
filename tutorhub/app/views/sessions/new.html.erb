@@ -1,0 +1,38 @@
+<% content_for :title, "Sign in — TutorHub" %>
+
+<section class="auth-shell">
+  <div class="form-card">
+    <h1 class="form-card__title">Welcome back</h1>
+    <p class="form-card__subtitle">Sign in to manage your tutoring schedule.</p>
+
+    <% flash.each do |level, msg| %>
+      <div class="flash flash--<%= level %>"><%= msg %></div>
+    <% end %>
+
+    <%= simple_form_for :session, url: login_path, method: :post, html: { class: "stacked-form" } do |f| %>
+      <div class="field">
+        <%= f.input :email,
+                    label: "Email",
+                    required: true,
+                    autofocus: true,
+                    input_html: { autocomplete: "email", class: "input" } %>
+      </div>
+
+      <div class="field">
+        <%= f.input :password,
+                    label: "Password",
+                    required: true,
+                    input_html: { autocomplete: "current-password", class: "input" } %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Sign in", class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
+
+    <p class="form-card__footer">
+      No account yet?
+      <%= link_to "Create one", signup_path, class: "link" %>.
+    </p>
+  </div>
+</section>

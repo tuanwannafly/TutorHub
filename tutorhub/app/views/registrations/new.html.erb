@@ -1,0 +1,133 @@
+<% content_for :title, "Sign up — TutorHub" %>
+
+<section class="auth-shell">
+  <div class="form-card form-card--wide">
+    <h1 class="form-card__title">Create your TutorHub account</h1>
+    <p class="form-card__subtitle">
+      Students find tutors. Tutors find students. Pick the role that fits you.
+    </p>
+
+    <% flash.each do |level, msg| %>
+      <div class="flash flash--<%= level %>"><%= msg %></div>
+    <% end %>
+
+    <% if @user.errors.any? %>
+      <div class="form-errors">
+        <p class="form-errors__title">
+          <%= pluralize(@user.errors.count, "error") %> stopped this account
+          from being created:
+        </p>
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= simple_form_for @user,
+                        url: signup_path,
+                        html: { class: "stacked-form", id: "signup-form" } do |f| %>
+      <div class="field">
+        <%= f.input :name,
+                    label: "Full name",
+                    required: true,
+                    input_html: { class: "input", autocomplete: "name" } %>
+      </div>
+
+      <div class="field">
+        <%= f.input :email,
+                    label: "Email",
+                    required: true,
+                    input_html: { class: "input", autocomplete: "email" } %>
+      </div>
+
+      <div class="field">
+        <%= f.input :password,
+                    label: "Password",
+                    required: true,
+                    hint: "At least 6 characters.",
+                    input_html: { class: "input", autocomplete: "new-password" } %>
+      </div>
+
+      <div class="field">
+        <%= f.input :password_confirmation,
+                    label: "Confirm password",
+                    required: true,
+                    input_html: { class: "input", autocomplete: "new-password" } %>
+      </div>
+
+      <div class="field">
+        <%= f.input :role,
+                    collection: User.roles.keys.map { |k| [k.titleize, k] },
+                    label: "I want to…",
+                    include_blank: false,
+                    selected: @user.role,
+                    input_html: { class: "input", id: "user-role-select" } %>
+      </div>
+
+      <%# Tutor-only fields. The server still ignores them when role != tutor,
+          so a vanilla HTML5 submit (e.g. with JS disabled) is safe — the worst
+          that happens is the extra params are dropped. %>
+      <fieldset id="tutor-fields" class="fieldset" data-role-dependent="tutor">
+        <legend>Tutor details</legend>
+
+        <%= f.simple_fields_for @user.tutor_profile || @user.build_tutor_profile do |tp| %>
+          <div class="field">
+            <%= tp.input :subject,
+                         label: "Primary subject",
+                         required: false,
+                         input_html: { class: "input" } %>
+          </div>
+
+          <div class="field">
+            <%= tp.input :hourly_rate,
+                         label: "Hourly rate (USD)",
+                         as: :decimal,
+                         required: false,
+                         input_html: { class: "input", min: 0, step: 0.01, value: @user.tutor_profile&.hourly_rate || 25 } %>
+          </div>
+
+          <div class="field">
+            <%= tp.input :headline,
+                         label: "Headline",
+                         required: false,
+                         input_html: { class: "input", maxlength: 100 } %>
+          </div>
+
+          <div class="field">
+            <%= tp.input :bio,
+                         label: "About you",
+                         as: :text,
+                         required: false,
+                         input_html: { class: "input textarea", rows: 4, maxlength: 1000 } %>
+          </div>
+        <% end %>
+      </fieldset>
+
+      <div class="form-actions">
+        <%= f.submit "Create account", class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
+
+    <p class="form-card__footer">
+      Already have an account?
+      <%= link_to "Sign in", login_path, class: "link" %>.
+    </p>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var select = document.getElementById("user-role-select");
+    var tutorFields = document.getElementById("tutor-fields");
+    if (!select || !tutorFields) return;
+
+    function sync() {
+      tutorFields.style.display = select.value === "tutor" ? "" : "none";
+    }
+
+    select.addEventListener("change", sync);
+    sync();
+  });
+</script>

@@ -1,0 +1,5 @@
+<%# Renders a small colored pill for a booking's status. %>
+<%# Colors come from stylesheet classes: badge-pending / badge-confirmed / badge-completed / badge-cancelled. %>
+<span class="badge badge-<%= booking.status %>">
+  <%= booking.status %>
+</span>

@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require "bundler/setup"
+require "rspec/core"
+RSpec::Core::Runner.invoke

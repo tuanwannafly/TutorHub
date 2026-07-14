@@ -1,0 +1,40 @@
+version: "3.9"
+
+# Two-service stack: PostgreSQL + Rails on :3000.
+#
+# This compose file does NOT start the React frontend — `npm run dev` runs
+# the Vite dev server on :5173 against this stack, with /api proxied.
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    command: bash -c "bundle exec rails db:create db:migrate db:seed || true && bundle exec rails s -b 0.0.0.0 -p 3000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/tutorhub_development
+      RAILS_ENV: development
+      SECRET_KEY_BASE: development-secret-change-me
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pg_data:

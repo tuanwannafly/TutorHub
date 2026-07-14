@@ -1,0 +1,25 @@
+en:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              taken: "is already registered"
+              invalid: "is not a valid email"
+        tutor_profile:
+          attributes:
+            hourly_rate:
+              greater_than: "must be greater than 0"
+        availability:
+          attributes:
+            base:
+              overlap: "Overlaps with an existing availability slot"
+        booking:
+          attributes:
+            base:
+              conflict: "That slot is no longer available"
+        review:
+          attributes:
+            rating:
+              not_in_range: "must be between 1 and 5"

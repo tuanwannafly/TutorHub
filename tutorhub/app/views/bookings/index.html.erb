@@ -1,0 +1,34 @@
+<h1>My bookings</h1>
+
+<% if current_user.tutor? %>
+  <p class="muted">Bookings where you are the assigned tutor.</p>
+<% else %>
+  <p class="muted">Bookings where you are the student.</p>
+<% end %>
+
+<% if @bookings.empty? %>
+  <p>No bookings yet.</p>
+<% else %>
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th><%= current_user.tutor? ? "Student" : "Tutor" %></th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @bookings.each do |b| %>
+        <tr>
+          <td><%= b.booking_date.strftime("%Y-%m-%d (%a)") %></td>
+          <td><%= b.start_time.strftime("%H:%M") %>&ndash;<%= b.end_time.strftime("%H:%M") %></td>
+          <td><%= (current_user.tutor? ? b.student.name : b.tutor.name) %></td>
+          <td><%= render "status_badge", booking: b %></td>
+          <td><%= link_to "View", booking_path(b), class: "btn btn-secondary" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

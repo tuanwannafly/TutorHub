@@ -1,0 +1,33 @@
+<h1>Book a session</h1>
+
+<% if @booking.errors.any? %>
+  <div class="errors">
+    <p><strong>Could not create booking:</strong></p>
+    <ul>
+      <% @booking.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @booking, url: bookings_path, local: true, class: "form-card" do |f| %>
+  <div class="field">
+    <%= f.label :tutor_id, "Tutor" %>
+    <%= f.collection_select :tutor_id, User.tutor.includes(:tutor_profile), :id, :name,
+                            include_blank: "Select a tutor" %>
+  </div>
+  <div class="field">
+    <%= f.label :booking_date %>
+    <%= f.date_field :booking_date, min: Date.current %>
+  </div>
+  <div class="field">
+    <%= f.label :start_time, "Start" %>
+    <%= f.time_field :start_time %>
+  </div>
+  <div class="field">
+    <%= f.label :end_time, "End" %>
+    <%= f.time_field :end_time %>
+  </div>
+  <%= f.submit "Request booking", class: "btn btn-primary" %>
+<% end %>

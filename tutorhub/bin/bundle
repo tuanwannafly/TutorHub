@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "bundler/setup"
+
+# Load Spring / Bootsnap if available (dev only).
+load Gem.bin_path("bundler", "bundle")

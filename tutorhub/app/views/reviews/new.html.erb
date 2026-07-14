@@ -1,0 +1,12 @@
+<h1>Leave a review</h1>
+
+<article class="card">
+  <p>
+    Booking with
+    <strong><%= @booking.tutor.name %></strong>
+    on <%= @booking.booking_date.strftime("%b %d") %>
+    at <%= @booking.start_time.strftime("%H:%M") %>.
+  </p>
+
+  <%= render "form", booking: @booking, review: @review %>
+</article>

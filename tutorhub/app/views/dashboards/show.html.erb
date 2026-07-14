@@ -1,0 +1,38 @@
+<% content_for :title, "Dashboard — TutorHub" %>
+
+<section class="dashboard">
+  <header class="dashboard__hero">
+    <h1 class="dashboard__title">
+      Welcome, <%= current_user.name %>
+    </h1>
+    <p class="dashboard__subtitle">
+      <span class="role-badge role-badge--<%= current_user.role %>">
+        <%= current_user.role.titleize %>
+      </span>
+    </p>
+  </header>
+
+  <% case current_user.role
+     when "tutor" %>
+    <div class="dashboard-grid">
+      <%= link_to "Manage availability", availabilities_path,
+                  class: "dashboard-card" %>
+      <%= link_to "View booking queue", bookings_path,
+                  class: "dashboard-card" %>
+    </div>
+  <% when "student" %>
+    <div class="dashboard-grid">
+      <%= link_to "Browse tutors", tutors_path,
+                  class: "dashboard-card" %>
+      <%= link_to "My bookings", bookings_path,
+                  class: "dashboard-card" %>
+    </div>
+  <% else %>
+    <div class="dashboard-grid">
+      <p class="muted">
+        Welcome. <%= link_to "Finish setting up your account",
+                              signup_path, class: "link" %>.
+      </p>
+    </div>
+  <% end %>
+</section>

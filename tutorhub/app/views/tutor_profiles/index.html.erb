@@ -1,0 +1,58 @@
+<% content_for :title, "Browse tutors" %>
+
+<section class="tutors-index">
+  <header class="page-header">
+    <h1>Find a tutor</h1>
+    <p class="muted">Browse our community of independent tutors.</p>
+  </header>
+
+  <div class="search-bar">
+    <%= form_with url: tutors_path, method: :get, local: true, class: "search-form" do %>
+      <label for="query" class="visually-hidden">Search tutors</label>
+      <input type="search" name="query" id="query" value="<%= params[:query] %>" placeholder="Search by subject, headline, bio, or email" />
+      <button type="submit" class="btn btn-primary">Search</button>
+      <% if params[:query].present? %>
+        <%= link_to "Clear", tutors_path, class: "btn btn-link" %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @tutor_profiles.any? %>
+    <div class="tutor-grid">
+      <% @tutor_profiles.each do |tutor| %>
+        <article class="tutor-card card">
+          <header class="tutor-card-header">
+            <h2 class="tutor-card-name"><%= tutor.display_name %></h2>
+            <p class="tutor-card-subject"><%= tutor.subject.presence || "General tutoring" %></p>
+          </header>
+
+          <p class="tutor-card-headline">
+            <%= truncate(tutor.headline.to_s, length: 140) %>
+          </p>
+
+          <footer class="tutor-card-footer">
+            <span class="hourly-rate">
+              <strong><%= number_to_currency(tutor.hourly_rate) %></strong>
+              <span class="muted">/ hour</span>
+            </span>
+            <%= link_to "View profile", tutor_path(tutor), class: "btn btn-secondary" %>
+          </footer>
+        </article>
+      <% end %>
+    </div>
+
+    <nav class="pagination">
+      <% if @page > 1 %>
+        <%= link_to "Previous", tutors_path(params.permit(:query).to_h.merge(page: @page - 1)), class: "btn btn-link" %>
+      <% end %>
+
+      <span class="page-info">Page <%= @page %> · showing <%= @tutor_profiles.size %> of <%= @total_count %></span>
+
+      <% if @page * @per_page < @total_count %>
+        <%= link_to "Next", tutors_path(params.permit(:query).to_h.merge(page: @page + 1)), class: "btn btn-link" %>
+      <% end %>
+    </nav>
+  <% else %>
+    <p class="empty-state">No tutors found. Try a different search.</p>
+  <% end %>
+</section>

@@ -1,0 +1,61 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# Ignore environment files (except .example).
+/.env
+/.env.*
+!/.env.example
+
+# Ignore RubyGems lockfile (we commit it for reproducibility — see comment below).
+# Note: Rails 7+ recommends committing Gemfile.lock. We commit it for production parity.
+# If you prefer not to commit it, uncomment:
+# /Gemfile.lock
+
+# Local-only IDE / OS files.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Test coverage reports.
+/coverage/
+
+# Ignore compiled assets for production (we use propshaft + importmap-rails).
+/public/assets/
+/public/packs/
+
+# Ignore Rails 7 with turbo/stimulus generated binstubs if you don't use them
+# (kept here for transparency)
+/node_modules/
+
+# Byebug / pry history.
+.byebug_history
+.pry_history
+
+# Solargraph / Sorbet caches.
+.solargraph.yml.cache
+tmp/cache/

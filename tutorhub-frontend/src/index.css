@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────
+   Globals — The Verge-inspired tokens.
+   We extend Tailwind tokens above; the layer below defines the
+   handful of reusable composite classes (button pills, cards,
+   timeline items, status badges) that show up across pages.
+────────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html, body, #root { height: 100%; }
+
+  body {
+    font-family: theme("fontFamily.sans");
+    color: theme("colors.hazard.white");
+    background-color: theme("colors.canvas");
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: theme("colors.mint.DEFAULT");
+    color: theme("colors.absolute");
+  }
+
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: theme("colors.link"); }
+
+  button, input, select, textarea { font-family: inherit; }
+
+  /* Hide the spinner on number inputs */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  input[type="number"] { -moz-appearance: textfield; }
+}
+
+@layer components {
+  /* ── Pills ───────────────────────────────────────────────────── */
+  .pill {
+    @apply inline-flex items-center justify-center font-mono uppercase font-semibold tracking-[0.15em];
+    @apply rounded-full px-6 py-2.5 text-tag transition-colors duration-150 ease-out;
+    min-height: 44px;
+  }
+  .pill--primary {
+    background-color: theme("colors.mint.DEFAULT");
+    color: theme("colors.absolute");
+  }
+  .pill--primary:hover {
+    background-color: rgba(255,255,255,0.2);
+    color: theme("colors.absolute");
+    box-shadow: 0 0 0 1px #c2c2c2;
+  }
+  .pill--primary:active { background-color: rgba(140,140,140,0.87); opacity: 0.5; }
+  .pill--primary:focus-visible { background-color: theme("colors.focus"); color: #fff; box-shadow: 0 0 0 1px #0500ff; outline: none; }
+
+  .pill--secondary {
+    background-color: theme("colors.slate.700");
+    color: theme("colors.hazard.muted");
+  }
+  .pill--secondary:hover { background-color: rgba(255,255,255,0.2); color: theme("colors.absolute"); }
+  .pill--secondary:focus-visible { background-color: theme("colors.focus"); color: #fff; outline: none; }
+
+  .pill--outline {
+    background: transparent;
+    color: theme("colors.mint.DEFAULT");
+    border: 1px solid theme("colors.mint.DEFAULT");
+    @apply rounded-4xl;
+  }
+  .pill--outline:hover { background: theme("colors.mint.DEFAULT"); color: theme("colors.absolute"); }
+
+  .pill--ultraviolet {
+    background: transparent;
+    color: theme("colors.ultraviolet.DEFAULT");
+    border: 1px solid theme("colors.ultraviolet.DEFAULT");
+    @apply rounded-3xl;
+  }
+  .pill--ultraviolet:hover { background: theme("colors.ultraviolet.DEFAULT"); color: #fff; }
+
+  .pill--danger {
+    background-color: #b91c1c;
+    color: #fff;
+  }
+  .pill--danger:hover { background-color: #7f1d1d; }
+
+  .pill--small { min-height: 32px; padding: 6px 14px; font-size: 0.69rem; }
+
+  /* ── Forms ────────────────────────────────────────────────────── */
+  .field-label {
+    @apply block text-label font-semibold text-hazard-muted mb-2 tracking-[0.01em];
+  }
+  .field-input {
+    @apply w-full bg-canvas border border-hazard-secondary/50 rounded-sm px-3.5 py-3 text-body text-hazard-white;
+    @apply focus:outline-none focus:border-mint focus:shadow-ring-mint transition-colors duration-150;
+  }
+  .field-input::placeholder { color: theme("colors.hazard.secondary"); }
+  .field-input[aria-invalid="true"] {
+    border-color: theme("colors.ultraviolet.DEFAULT");
+    box-shadow: 0 0 0 1px theme("colors.ultraviolet.DEFAULT");
+  }
+  .field-hint  { @apply text-caption text-hazard-secondary mt-1.5; }
+  .field-error { @apply text-caption text-ultraviolet mt-1.5; }
+
+  /* ── Cards / Tiles ────────────────────────────────────────────── */
+  .tile {
+    @apply bg-canvas border border-hazard-white/15 rounded-xl p-6 transition-colors duration-150;
+  }
+  .tile:hover { border-color: theme("colors.mint.DEFAULT"); }
+  .tile-accent-mint {
+    background-color: theme("colors.mint.DEFAULT");
+    color: theme("colors.absolute");
+    border-color: theme("colors.mint.border");
+  }
+  .tile-accent-ultraviolet {
+    background-color: rgba(82,0,255,0.9);
+    color: #fff;
+    border-color: transparent;
+  }
+  .tile-accent-white {
+    background-color: #fff;
+    color: theme("colors.absolute");
+  }
+
+  /* ── Status badges (booking states) ───────────────────────────── */
+  .badge {
+    @apply inline-flex items-center font-mono uppercase font-semibold text-meta px-2.5 py-1 rounded-full tracking-[0.18em];
+  }
+  .badge-pending   { background: #fef3c7; color: #92400e; }
+  .badge-confirmed { background: #dbeafe; color: #1e40af; }
+  .badge-completed { background: #dcfce7; color: #166534; }
+  .badge-cancelled { background: #fee2e2; color: #991b1b; }
+  .badge-student   { background: #e0f2fe; color: #075985; }
+  .badge-tutor     { background: #ccfbf1; color: #115e59; }
+
+  /* ── Timeline rail (StoryStream) ──────────────────────────────── */
+  .timeline-rail {
+    position: relative;
+    padding-left: 80px;
+  }
+  .timeline-rail::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 56px;
+    width: 1px;
+    background-color: rgba(82, 0, 255, 0.4);
+  }
+  .timeline-stamp {
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: theme("fontFamily.mono");
+    font-size: theme("fontSize.meta.size");
+    letter-spacing: 0.18em;
+    color: theme("colors.hazard.secondary");
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 48px;
+    text-align: right;
+  }
+
+  /* ── Header / Nav ─────────────────────────────────────────────── */
+  .nav-link {
+    @apply font-mono uppercase tracking-[0.18em] text-tag text-hazard-muted transition-colors duration-150;
+    padding: 8px 4px;
+  }
+  .nav-link:hover, .nav-link.is-active { color: theme("colors.mint.DEFAULT"); }
+  .nav-link.is-active { box-shadow: theme("boxShadow.underline-mint"); }
+
+  /* ── Utility ──────────────────────────────────────────────────── */
+  .container-editorial {
+    @apply mx-auto w-full max-w-editorial px-6 md:px-12;
+  }
+  .container-readable {
+    @apply mx-auto w-full max-w-readable px-6;
+  }
+  .divider-hairline { @apply border-t border-hazard-white/10; }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid theme("colors.mint.DEFAULT");
+    outline-offset: 3px;
+  }
+
+  /* Skeleton for loading states */
+  .skeleton {
+    background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}

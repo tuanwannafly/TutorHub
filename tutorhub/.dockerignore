@@ -1,0 +1,10 @@
+.git
+.gitignore
+log/*.log
+tmp/*
+node_modules
+coverage
+.rspec_status
+.bundle
+vendor/bundle
+spec/dummy

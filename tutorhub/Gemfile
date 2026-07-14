@@ -1,0 +1,63 @@
+source 'https://rubygems.org'
+
+ruby '4.0.5'
+
+# ── Core ──────────────────────────────────────────────────────────────────────
+gem 'pg', '~> 1.5'
+gem 'puma', '>= 5.0'
+gem 'rails', '~> 7.1.3'
+
+# ── Frontend (intentionally light) ──────────────────────────────────────────
+# Hand-written CSS, no Tailwind. importmap-rails + Hotwire are kept in.
+gem 'importmap-rails'
+gem 'propshaft'
+gem 'stimulus-rails'
+gem 'turbo-rails'
+
+# ── CORS: allow the React dev server to call the JSON API with cookies ───
+gem 'rack-cors'
+
+# ── Auth: bcrypt (has_secure_password) ───────────────────────────────────────
+gem 'bcrypt', '~> 3.1.7'
+
+# ── State machine: hand-rolled enum + methods, NO AASM gem ─────────────────
+# (Keep deps slim; we want to show that we can write a state machine.)
+
+# ── ActiveJob comes with Rails; we'll set async adapter in production
+gem 'redis', '~> 5.0'
+gem 'sidekiq', '~> 7.2', require: false # optional in production
+
+# ── Pagination / forms (lightweight) ────────────────────────────────────────
+gem 'simple_form', '~> 5.2'
+
+# ── Boot performance ────────────────────────────────────────────────────────
+gem 'bootsnap', require: false
+
+# ── Windows / development niceties ──────────────────────────────────────────
+group :development, :test do
+  gem 'brakeman', require: false
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw]
+end
+
+# ── Test suite ──────────────────────────────────────────────────────────────
+group :test do
+  gem 'capybara'
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'rspec-rails', '~> 7.0'
+  gem 'selenium-webdriver', require: false
+  gem 'shoulda-matchers', '~> 6.2'
+  gem 'webmock'
+end
+
+# ── Lint ────────────────────────────────────────────────────────────────────
+gem 'rubocop', '~> 1.60', require: false
+gem 'rubocop-performance', '~> 1.19', require: false
+gem 'rubocop-rails', '~> 2.22', require: false
+
+# ── Production / Heroku-ish ────────────────────────────────────────────────
+group :production do
+  gem 'rack', '~> 3.0'
+end

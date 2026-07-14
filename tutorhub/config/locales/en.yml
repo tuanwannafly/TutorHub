@@ -1,0 +1,32 @@
+en:
+  hello: "Hello world"
+  nav:
+    home: "Home"
+    dashboard: "Dashboard"
+    login: "Log in"
+    logout: "Log out"
+    signup: "Sign up"
+  flash:
+    sessions:
+      invalid_credentials: "Invalid email or password."
+      logged_out: "You have been logged out."
+    registrations:
+      created: "Welcome aboard!"
+      failed: "Could not create account."
+    bookings:
+      created: "Booking requested."
+      confirmed: "Booking confirmed."
+      cancelled: "Booking cancelled."
+      completed: "Booking marked complete."
+      conflict: "That slot was just taken — please pick another time."
+    reviews:
+      created: "Thanks for your review!"
+      invalid: "Review must be 1–5 stars and tied to a completed booking."
+  booking_statuses:
+    pending:   "pending"
+    confirmed: "confirmed"
+    completed: "completed"
+    cancelled: "cancelled"
+  user_roles:
+    student: "Student"
+    tutor:   "Tutor"

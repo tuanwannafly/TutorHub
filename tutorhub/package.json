@@ -1,0 +1,17 @@
+{
+  "name": "tutorhub",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "echo \"No JS bundler — Rails 7 importmap is used.\"",
+    "lint": "echo \"Lint via Rubocop — bundle exec rubocop\""
+  },
+  "dependencies": {
+    "@hotwired/turbo-rails": "^7.3.0",
+    "@hotwired/stimulus": "^3.2.0",
+    "esbuild": "^0.19.0"
+  }
+}

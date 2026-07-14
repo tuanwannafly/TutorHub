@@ -1,0 +1,88 @@
+<% content_for :title, "My availability" %>
+
+<section class="availability-page">
+  <header class="page-header">
+    <h1>My availability</h1>
+    <p class="muted">Define the weekly windows when students can book you. Slots must not overlap.</p>
+  </header>
+
+  <div class="card availability-form-card">
+    <h2>Add a window</h2>
+    <%= form_with model: @availability, url: availabilities_path, local: true, class: "availability-form" do |f| %>
+      <% if @availability.errors.any? %>
+        <div class="errors">
+          <p><strong><%= pluralize(@availability.errors.count, "error") %> prevented this window from being saved:</strong></p>
+          <ul>
+            <% @availability.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-row">
+        <div class="field">
+          <%= f.label :day_of_week, "Day" %>
+          <%= f.select :day_of_week,
+                Availability::DAYS_OF_WEEK.map { |n, label| [label, n] },
+                { include_blank: "Choose a day" } %>
+        </div>
+
+        <div class="field">
+          <%= f.label :start_time %>
+          <%= f.time_field :start_time, required: true %>
+        </div>
+
+        <div class="field">
+          <%= f.label :end_time %>
+          <%= f.time_field :end_time, required: true %>
+        </div>
+
+        <div class="field actions">
+          <%= f.submit "Add window", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="availability-list">
+    <% if @availabilities.empty? %>
+      <p class="empty-state">You haven't added any availability windows yet.</p>
+    <% else %>
+      <% Availability::DAYS_OF_WEEK.each do |n, label| %>
+        <% windows = @grouped[n] || [] %>
+        <% next if windows.empty? %>
+
+        <div class="card day-group">
+          <h3><%= label %></h3>
+          <table class="availability-table">
+            <thead>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                <th>Length</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% windows.each do |window| %>
+                <tr>
+                  <td><%= window.start_time.strftime("%H:%M") %></td>
+                  <td><%= window.end_time.strftime("%H:%M") %></td>
+                  <td><%= window.length_minutes %> min</td>
+                  <td class="actions-col">
+                    <%= button_to "Remove",
+                          availability_path(window),
+                          method: :delete,
+                          data: { turbo_confirm: "Remove this availability window?" },
+                          class: "btn btn-danger btn-small" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</section>

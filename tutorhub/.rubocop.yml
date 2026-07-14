@@ -1,0 +1,41 @@
+# rubocop:disable all
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 4.0
+  NewCops: disable
+  SuggestExtensions: false
+  Exclude:
+    - "bin/**/*"
+    - "db/schema.rb"
+    - "db/migrate/*"
+    - "config/**/*"
+    - "spec/spec_helper.rb"
+    - "spec/rails_helper.rb"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - ".bundle/**/*"
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/BlockLength:
+  AllowedMethods:
+    - describe
+    - context
+    - it
+    - let
+    - before
+    - after
+  Exclude:
+    - "spec/**/*"
+    - "config/**/*"
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/AbcSize:
+  Max: 25
